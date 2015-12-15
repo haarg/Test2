@@ -18,6 +18,9 @@ use base 'Test2::Formatter';
 our @EXPORT_OK = qw/OUT_STD OUT_ERR OUT_TODO/;
 use base 'Exporter';
 
+# i don't like this direct mapping.  possibly events could have a name that would
+# be used for mapping?  it should be possible to subclass an event to tweak it
+# slightly without needing to register it with this or any other formatter.
 my %CONVERTERS = (
     'Test2::Event::Ok'        => \&_ok_event,
     'Test2::Event::Skip'      => \&_skip_event,
@@ -39,6 +42,8 @@ sub register_event {
     $CONVERTERS{$type} = $convert;
 }
 
+# we store duped copies of these, and set autoflush on those.  why do we need
+# to mess with the globals?
 _autoflush(\*STDOUT);
 _autoflush(\*STDERR);
 
@@ -73,6 +78,7 @@ sub encoding {
     return $self->{+_ENCODING};
 }
 
+# it isn't obvious why this is needed
 if ($^C) {
     no warnings 'redefine';
     *write = sub {};

@@ -47,6 +47,7 @@ BEGIN {
     *CAN_FORK        = _can_fork()     ? sub() { 1 } : sub() { 0 };
 }
 
+# protect is unused
 sub _manual_protect(&) {
     my $code = shift;
 
@@ -80,6 +81,10 @@ sub _local_protect(&) {
     return $ok;
 }
 
+# these can be cleaned up a lot
+# if $error is always true when there is an exception, why is $ok needed?
+# why localized __DIE__?
+# $@ and $! will be undef inside the sub called.  is this wanted?
 sub _manual_try(&;@) {
     my $code = shift;
     my $args = \@_;
@@ -130,6 +135,7 @@ sub _local_try(&;@) {
     return ($ok, $error);
 }
 
+# is this a win32 problem or a threads problem?
 # Older versions of perl have a nasty bug on win32 when localizing a variable
 # before forking or starting a new thread. So for those systems we use the
 # non-local form. When possible though we use the faster 'local' form.

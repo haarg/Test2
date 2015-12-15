@@ -2,11 +2,22 @@ package Test2::IPC;
 use strict;
 use warnings;
 
+# unused
 use Config qw/%Config/;
+# carp unused
 use Carp qw/confess carp longmess/;
 
 use Test2::Util::HashBase qw{no_fatal};
 
+# this package stores class data and serves as a base class.  bad.
+# should be split out in some form.
+
+# the interface here is weird.
+# 'use Test::IPC::Whatever;' registers it as a driver
+# only the first driver is used
+# if something tries to get a list of drivers (setting Files as default), then
+# later tries to load another driver, the additional driver won't be used.
+# not certain what the intention is here to propose a fix.
 sub import {
     my $class = shift;
     return if $class eq __PACKAGE__;
@@ -14,6 +25,7 @@ sub import {
 }
 
 my @DRIVERS;
+# is this alias really needed?
 *register_driver = \&register_drivers;
 sub register_drivers {
     my $class = shift;

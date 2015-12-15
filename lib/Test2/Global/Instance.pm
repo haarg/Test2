@@ -109,6 +109,10 @@ sub add_context_init_callback {
     confess "Context-init callbacks must be coderefs"
         unless $code && $rtype eq 'CODE';
 
+    # not a big fan of these reftype checks.  maybe:
+    #confess "Context-init callbacks must be coderefs"
+    #    unless eval { \&$code };
+
     push @{$self->{+CONTEXT_INIT_CALLBACKS}} => $code;
 }
 

@@ -4,11 +4,13 @@ use warnings;
 
 use Test2::Util qw/get_tid/;
 
+# carp unused
 use Carp qw/confess carp/;
 
 use Test2::Util::HashBase qw{frame detail pid tid};
 
 sub init {
+    # lc "Frame"
     confess "Frame is required"
         unless $_[0]->{+FRAME};
 

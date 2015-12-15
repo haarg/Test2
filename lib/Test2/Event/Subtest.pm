@@ -2,7 +2,9 @@ package Test2::Event::Subtest;
 use strict;
 use warnings;
 
+# unused
 use Scalar::Util qw/blessed/;
+# unused
 use Carp qw/confess/;
 
 use base 'Test2::Event::Ok';

@@ -12,6 +12,7 @@ use Carp qw/croak confess longmess/;
 use Scalar::Util qw/weaken blessed/;
 use Test2::Util qw/get_tid try/;
 
+# just use our
 use vars qw/$VERSION/;
 $Test2::VERSION = 0.000005;
 
@@ -66,6 +67,7 @@ sub context {
     _depth_error($current, [$pkg, $file, $line, $sub, $depth])
         if $current;
 
+    # Test2::Context::Trace->new ?
     my $dbg = bless(
         {
             frame => [$pkg, $file, $line, $sub],

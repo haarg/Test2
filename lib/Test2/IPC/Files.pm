@@ -18,6 +18,7 @@ sub is_viable { 1 }
 sub init {
     my $self = shift;
 
+    # possibly TMPDIR => 1 and a template
     my $tmpdir = File::Temp::tempdir(CLEANUP => 0);
 
     $self->abort_trace("Could not get a temp dir") unless $tmpdir;
@@ -41,6 +42,7 @@ sub hub_file {
     my $self = shift;
     my ($hid) = @_;
     my $tdir = $self->{+TEMPDIR};
+    # not sure what the canonpath calls in this module are for
     return File::Spec->canonpath("$tdir/HUB-$hid");
 }
 

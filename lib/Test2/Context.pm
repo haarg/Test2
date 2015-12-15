@@ -45,6 +45,11 @@ sub init {
 
 sub snapshot { bless {%{$_[0]}}, __PACKAGE__ }
 
+# it's not clear why 'release' is needed separately from the DESTROY.
+# having it separate also seems to introduce horrid things like undefing
+# the object it was called on, and refcount checks.
+# there's probably a good reason for it currently, but i feel like the design
+# could be tweaked to remove the need.
 sub release {
     my ($self) = @_;
     return $_[0] = undef if Internals::SvREFCNT(%$self) != 2;
@@ -80,6 +85,8 @@ sub DESTROY {
     my $hid = $self->{+HUB}->hid;
 
     return unless $CONTEXTS->{$hid} && $CONTEXTS->{$hid} == $self;
+    # quoting stuff seems strange here.  only consequence i can see is triggering
+    # different overloads
     return unless "$@" eq "" . $self->{+_ERR};
 
     my $trace = $self->{+TRACE} || return;

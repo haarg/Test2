@@ -4,6 +4,8 @@ use warnings;
 
 my %META;
 
+# if used multiple times in one class, this will half work.
+# either allow it to always work, or croak
 sub import {
     my ($class, @accessors) = @_;
 
@@ -19,6 +21,7 @@ sub import {
     my $isa = \@{"$into\::ISA"};
     use strict 'refs';
 
+    # this will only work for a single level of inheritance
     if(my @bmetas = map { $META{$_} or () } @$isa) {
         $eval .= "sub " . uc($_) . "() { '$_' };\n" for map { @{$_} } @bmetas;
     }
